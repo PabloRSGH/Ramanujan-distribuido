@@ -1,3 +1,6 @@
+/**
+ * 2024, Rivera Sánchez Pablo
+ */
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -19,16 +22,40 @@ public class ServerA {
                         PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                         String request = in.readLine();
                         System.out.println("Datos recibidos: " + request);
-                        if (request.startsWith("GET /") && request.split("/").length > 2) {
+                        if (request.startsWith("GET /favicon.ico")) {
+                            out.println("HTTP/1.1 204 No Content");
+                            out.println("\r\n");
+                        } else if (request.startsWith("GET /") && request.split("/").length > 2 &&request.endsWith("1.1")) {
                             String[] parts = request.split(" ")[1].split("/");
                             int kInitial = Integer.parseInt(parts[1]);
                             int kFinal = Integer.parseInt(parts[2]);
                             BigDecimal sum = calculateSum(kInitial, kFinal);
                             System.out.println("Datos enviados: " + sum.toString());
-                            out.println(sum.toString());
-                        } else {
-                            out.println("Error: Formato de petición incorrecto");
+                            //out.println(sum);
+                            out.println("HTTP/1.1 200 OK");
+                            out.println("Content-Type: text/html");
+                            out.println("\r\n");
+                            out.println("<!DOCTYPE html><html><body><h1>Resultado: " + sum.toString() + "</h1></body></html>");
                         }
+                        else if (request.startsWith("GET /") && request.split("/").length > 2 ) {
+                            String[] parts = request.split(" ")[1].split("/");
+                            int kInitial = Integer.parseInt(parts[1]);
+                            int kFinal = Integer.parseInt(parts[2]);
+                            BigDecimal sum = calculateSum(kInitial, kFinal);
+                            System.out.println("Datos enviados: " + sum.toString());
+                            out.println(sum);
+                            out.println("HTTP/1.1 200 OK");
+                            out.println("Content-Type: text/html");
+                            out.println("\r\n");
+                            out.println("<!DOCTYPE html><html><body><h1>Resultado: " + sum.toString() + "</h1></body></html>");
+                        } 
+                        else {
+                            out.println("HTTP/1.1 400 Bad Request");
+                            out.println("Content-Type: text/html");
+                            out.println("\r\n");
+                            out.println("<!DOCTYPE html><html><body><h1>Error: Formato de petición incorrecto</h1></body></html>");
+                        }
+                        out.flush();
                         clientSocket.close();
                     } catch (IOException e) {
                         e.printStackTrace();

@@ -1,3 +1,6 @@
+/**
+ * 2024, Rivera Sánchez Pablo
+ */
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -6,8 +9,8 @@ import java.net.*;
 
 public class ServerB {
     public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(8082);
-        System.out.println("ServerB escuchando en el puerto 8082");
+        ServerSocket serverSocket = new ServerSocket(80);
+        System.out.println("ServerB escuchando en el puerto 80");
         while (true) {
             final Socket clientSocket = serverSocket.accept();
             System.out.println("Cliente conectado a ServerB");
@@ -23,9 +26,9 @@ public class ServerB {
                             BigDecimal sum = BigDecimal.ZERO;
                             Thread[] threads = new Thread[3];
                             BigDecimal[] results = new BigDecimal[3];
-                            String[] serverAddresses = { "localhost", "localhost", "localhost" };
+                            String[] serverAddresses = { "20.84.50.238", "20.55.35.188", "localhost" }; //las direcciones deben cambiarse de acuerdo con el host real
                             for (int i = 0; i < 3; i++) {
-                                int kInitial = i * 1000 ;
+                                int kInitial = i * 1000;
                                 int kFinal = (i + 1) * 1000;
                                 int finalI = i;
                                 String serverAddress = serverAddresses[i];
